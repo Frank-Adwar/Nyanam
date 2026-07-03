@@ -1,0 +1,6 @@
+{
+  "name": "Victoria Fresh Tilapia",
+  "description": "Premium Lake Victoria tilapia delivery service in Kenya. Enjoy fresh, fried, smoked, or marinated fish delivered from lake to table, paired with founder David's entrepreneurial journey.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
