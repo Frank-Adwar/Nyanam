@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from '../components/Router';
-import { ArrowLeft, ArrowUpRight, Menu, X, MapPin, Mail } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, Menu, X, MapPin, Mail, Volume2, VolumeX } from 'lucide-react';
 import founderDavidImg from '../assets/images/portfolio_portrait_editorial.png';
 
 const projects = [
@@ -37,6 +37,48 @@ const projects = [
 export const Portfolio: React.FC = () => {
   const { navigate } = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [musicEnabled, setMusicEnabled] = useState(true);
+  const jazzAudioRef = useRef<HTMLAudioElement | null>(null);
+
+  const startJazz = () => {
+    const audio = jazzAudioRef.current;
+    if (audio) {
+      if (audio.readyState > 0 && audio.currentTime < 10) audio.currentTime = 10;
+      void audio.play().catch(() => undefined);
+    }
+  };
+
+  useEffect(() => {
+    const audio = new Audio('https://upload.wikimedia.org/wikipedia/commons/0/03/Jazz_at_the_park.ogg');
+    audio.loop = false;
+    audio.volume = 0.62;
+    audio.preload = 'auto';
+    const skipIntro = () => { audio.currentTime = 10; };
+    const loopWithoutVoices = () => {
+      audio.currentTime = 10;
+      void audio.play().catch(() => undefined);
+    };
+    audio.addEventListener('loadedmetadata', skipIntro, { once: true });
+    audio.addEventListener('ended', loopWithoutVoices);
+    jazzAudioRef.current = audio;
+    startJazz();
+    const unlockAudio = () => startJazz();
+    window.addEventListener('pointerdown', unlockAudio, { once: true });
+    return () => {
+      window.removeEventListener('pointerdown', unlockAudio);
+      audio.removeEventListener('ended', loopWithoutVoices);
+      audio.pause();
+      audio.src = '';
+      jazzAudioRef.current = null;
+    };
+  }, []);
+
+  const toggleMusic = () => {
+    const next = !musicEnabled;
+    setMusicEnabled(next);
+    if (next) startJazz();
+    else jazzAudioRef.current?.pause();
+  };
 
   const goTo = (id: string) => {
     setMenuOpen(false);
@@ -63,12 +105,18 @@ export const Portfolio: React.FC = () => {
             <button onClick={() => goTo('practice')} className="hover:text-[#d7a9aa]">Practice</button>
             <button onClick={() => goTo('contact')} className="hover:text-[#d7a9aa]">Contact</button>
           </div>
-          <button
-            onClick={() => navigate('/fish')}
-            className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] hover:text-[#d7a9aa]"
-          >
-            <ArrowLeft className="h-4 w-4" /> <span className="hidden sm:inline">Nyanam Fisheries</span>
-          </button>
+          <div className="flex items-center gap-4 sm:gap-6">
+            <button onClick={toggleMusic} className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] hover:text-[#d7a9aa]" aria-label={musicEnabled ? 'Mute jazz' : 'Play jazz'} title={musicEnabled ? 'Mute jazz' : 'Play jazz'}>
+              {musicEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
+              <span className="hidden md:inline">Jazz {musicEnabled ? 'on' : 'off'}</span>
+            </button>
+            <button
+              onClick={() => navigate('/fish')}
+              className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] hover:text-[#d7a9aa]"
+            >
+              <ArrowLeft className="h-4 w-4" /> <span className="hidden sm:inline">Nyanam Fisheries</span>
+            </button>
+          </div>
         </div>
       </header>
 
@@ -76,7 +124,7 @@ export const Portfolio: React.FC = () => {
         <div className="fixed inset-0 z-40 grid bg-[#6f1d1b] pt-20 lg:grid-cols-[8vw_1fr] lg:pt-24">
           <div className="hidden border-r border-white/15 lg:block" />
           <nav className="flex flex-col justify-center px-8 sm:px-16 lg:px-[8vw]">
-            <p className="mb-10 text-[10px] font-bold uppercase tracking-[0.3em] text-white/55">Index / David Omondi</p>
+            <p className="mb-10 text-[10px] font-bold uppercase tracking-[0.3em] text-white/55">Index / David Ndolo</p>
             {['top', 'work', 'practice', 'contact'].map((id, index) => (
               <button key={id} onClick={() => goTo(id)} className="group flex items-baseline gap-6 border-t border-white/20 py-4 text-left">
                 <span className="text-xs text-white/45">0{index + 1}</span>
@@ -94,14 +142,13 @@ export const Portfolio: React.FC = () => {
             <span className="portfolio-display text-5xl italic text-[#d7a9aa]">D</span>
           </aside>
 
-          <div className="relative min-h-[62vh] overflow-hidden border-b border-white/10 lg:min-h-0 lg:border-b-0 lg:border-r">
-            <img src={founderDavidImg} alt="David Omondi" className="absolute inset-0 h-full w-full object-cover object-center grayscale-[18%] contrast-[1.06]" />
+          <div className="relative overflow-hidden border-b border-white/10 bg-[#090707] lg:min-h-0 lg:border-b-0 lg:border-r">
+            <img src={founderDavidImg} alt="David Ndolo" className="relative block h-auto w-full object-contain object-center grayscale-[18%] contrast-[1.06] lg:absolute lg:inset-0 lg:h-full" style={{ objectFit: 'contain' }} />
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/15" />
-            <span className="portfolio-display absolute left-6 top-4 text-[8rem] italic leading-none text-[#d7a9aa] mix-blend-screen min-[380px]:text-[10rem] sm:left-10 sm:text-[15rem]">D</span>
             <div className="absolute bottom-7 left-7 right-7 flex items-end justify-between sm:bottom-10 sm:left-10 sm:right-10">
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/70">Portrait No. 01</p>
-                <p className="portfolio-display mt-1 text-4xl">David Omondi</p>
+                <p className="portfolio-display mt-1 text-4xl">David Ndolo</p>
               </div>
               <p className="hidden text-right text-[9px] uppercase tracking-[0.22em] text-white/60 sm:block">Founder<br />Technologist<br />Systems builder</p>
             </div>
@@ -113,12 +160,12 @@ export const Portfolio: React.FC = () => {
             </div>
             <div className="my-16 lg:my-8">
               <p className="portfolio-display max-w-3xl text-3xl leading-[1.12] sm:text-4xl xl:text-[2.85rem]">
-                “I build ventures where <em className="text-[#d7a9aa]">technology meets dignity</em>—turning local knowledge into elegant systems that move value, not just products.”
+                “I build ventures where <em className="text-[#d7a9aa]">business meets dignity</em>—turning local knowledge into elegant systems that move value, not just products.”
               </p>
               <div className="mt-9 flex items-start gap-4">
                 <span className="mt-2 h-px w-12 bg-[#d7a9aa]" />
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-[0.2em]">David Omondi</p>
+                  <p className="text-xs font-bold uppercase tracking-[0.2em]">David Ndolo</p>
                   <p className="mt-1 text-[10px] uppercase tracking-[0.18em] text-white/45">Founder & Social Supply Chain Engineer</p>
                 </div>
               </div>
@@ -189,7 +236,7 @@ export const Portfolio: React.FC = () => {
               </div>
             </div>
             <div className="mt-24 flex flex-col justify-between gap-4 border-t border-white/10 pt-6 text-[9px] uppercase tracking-[0.22em] text-white/40 sm:flex-row">
-              <span>© 2026 David Omondi</span><span>Technology with texture · Enterprise with soul</span>
+              <span>© 2026 David Ndolo</span><span>Technology with texture · Enterprise with soul</span>
             </div>
           </div>
         </footer>

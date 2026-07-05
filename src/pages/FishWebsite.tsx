@@ -549,7 +549,7 @@ export const FishWebsite: React.FC<FishWebsiteProps> = ({
                   <div className="absolute inset-1.5 rounded-2xl bg-cyan-600/10 blur-md" />
                   <img
                     src={founderDavidImg}
-                    alt="Founder David Omondi"
+                    alt="Founder David Ndolo"
                     className="relative h-64 w-64 rounded-2xl object-cover border-4 border-white shadow-lg"
                     referrerPolicy="no-referrer"
                   />
@@ -563,7 +563,7 @@ export const FishWebsite: React.FC<FishWebsiteProps> = ({
               {/* Founder Preview Copy */}
               <div className="md:col-span-8 space-y-5">
                 <span className="font-mono text-[11px] font-bold uppercase tracking-widest text-cyan-600">The Visionary Behind the Freshness</span>
-                <h3 className="font-display text-2xl font-black text-gray-950 sm:text-3xl">Meet David Omondi</h3>
+                <h3 className="font-display text-2xl font-black text-gray-950 sm:text-3xl">Meet David Ndolo</h3>
                 
                 <p className="font-sans text-xs sm:text-sm text-gray-600 leading-relaxed">
                   "Growing up on the shores of Lake Victoria in Kisumu, I watched local fishers harvest some of the world’s best tilapia, only to sell it for pennies because they lacked cold storage or market connections. At Nyanam Fisheries, we are changing the story. We utilize modern cold chain routing to link Kisumu nets directly to your plate, raising incomes for fishing families while giving you healthy, certified seafood."
