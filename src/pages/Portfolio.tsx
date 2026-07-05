@@ -38,46 +38,24 @@ export const Portfolio: React.FC = () => {
   const { navigate } = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [musicEnabled, setMusicEnabled] = useState(true);
-  const jazzAudioRef = useRef<HTMLAudioElement | null>(null);
+  const jazzPlayerRef = useRef<HTMLIFrameElement | null>(null);
 
-  const startJazz = () => {
-    const audio = jazzAudioRef.current;
-    if (audio) {
-      if (audio.readyState > 0 && audio.currentTime < 10) audio.currentTime = 10;
-      void audio.play().catch(() => undefined);
-    }
+  const sendPlayerCommand = (command: 'playVideo' | 'pauseVideo') => {
+    jazzPlayerRef.current?.contentWindow?.postMessage(JSON.stringify({ event: 'command', func: command, args: [] }), 'https://www.youtube.com');
   };
 
   useEffect(() => {
-    const audio = new Audio('https://upload.wikimedia.org/wikipedia/commons/0/03/Jazz_at_the_park.ogg');
-    audio.loop = false;
-    audio.volume = 0.62;
-    audio.preload = 'auto';
-    const skipIntro = () => { audio.currentTime = 10; };
-    const loopWithoutVoices = () => {
-      audio.currentTime = 10;
-      void audio.play().catch(() => undefined);
-    };
-    audio.addEventListener('loadedmetadata', skipIntro, { once: true });
-    audio.addEventListener('ended', loopWithoutVoices);
-    jazzAudioRef.current = audio;
-    startJazz();
-    const unlockAudio = () => startJazz();
+    const unlockAudio = () => sendPlayerCommand('playVideo');
     window.addEventListener('pointerdown', unlockAudio, { once: true });
     return () => {
       window.removeEventListener('pointerdown', unlockAudio);
-      audio.removeEventListener('ended', loopWithoutVoices);
-      audio.pause();
-      audio.src = '';
-      jazzAudioRef.current = null;
     };
   }, []);
 
   const toggleMusic = () => {
     const next = !musicEnabled;
     setMusicEnabled(next);
-    if (next) startJazz();
-    else jazzAudioRef.current?.pause();
+    sendPlayerCommand(next ? 'playVideo' : 'pauseVideo');
   };
 
   const goTo = (id: string) => {
@@ -87,6 +65,15 @@ export const Portfolio: React.FC = () => {
 
   return (
     <div className="portfolio-page min-h-screen bg-[#0b0909] text-[#f4efe8]">
+      <iframe
+        ref={jazzPlayerRef}
+        src="https://www.youtube.com/embed/YK-3pL6rLpA?autoplay=1&loop=1&playlist=YK-3pL6rLpA&controls=0&rel=0&playsinline=1&enablejsapi=1"
+        title="Portfolio jazz music"
+        allow="autoplay; encrypted-media"
+        onLoad={() => sendPlayerCommand('playVideo')}
+        className="pointer-events-none fixed bottom-0 left-0 h-px w-px opacity-0"
+        tabIndex={-1}
+      />
       <header className="fixed inset-x-0 top-0 z-50 flex h-20 items-center border-b border-white/10 bg-[#0b0909]/80 backdrop-blur-md lg:h-24">
         <button
           onClick={() => setMenuOpen(!menuOpen)}
