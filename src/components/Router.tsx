@@ -13,9 +13,9 @@ interface RouterContextType {
 const RouterContext = createContext<RouterContextType | undefined>(undefined);
 
 export const RouterProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Normalize path. If "/" or empty, default to "/fish"
+  // Hash routing keeps every page refresh-safe on static hosts such as GitHub Pages.
   const getNormalizedPath = () => {
-    const rawPath = window.location.pathname;
+    const rawPath = window.location.hash.replace(/^#/, '');
     if (rawPath === '/' || rawPath === '') return '/fish';
     return rawPath;
   };
@@ -23,20 +23,20 @@ export const RouterProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [path, setPath] = useState<string>(getNormalizedPath());
 
   useEffect(() => {
-    const handlePopState = () => {
+    const handleLocationChange = () => {
       setPath(getNormalizedPath());
     };
 
-    window.addEventListener('popstate', handlePopState);
+    window.addEventListener('hashchange', handleLocationChange);
     return () => {
-      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('hashchange', handleLocationChange);
     };
   }, []);
 
   const navigate = (to: string) => {
     // Standardize destination path
     const dest = to === '/' ? '/fish' : to;
-    window.history.pushState(null, '', dest);
+    window.location.hash = dest;
     setPath(dest);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -70,7 +70,7 @@ export const Link: React.FC<LinkProps> = ({ to, children, className, onClick, ..
   };
 
   return (
-    <a href={to} onClick={handleClick} className={className} {...props}>
+    <a href={`#${to}`} onClick={handleClick} className={className} {...props}>
       {children}
     </a>
   );

@@ -6,8 +6,7 @@
 import React, { useState } from 'react';
 import { useRouter } from '../components/Router';
 import { ArrowLeft, ArrowUpRight, Menu, X, MapPin, Mail } from 'lucide-react';
-
-const founderDavidImg = '/src/assets/images/portfolio_portrait_editorial.png';
+import founderDavidImg from '../assets/images/portfolio_portrait_editorial.png';
 
 const projects = [
   {

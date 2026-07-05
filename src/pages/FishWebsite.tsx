@@ -14,11 +14,11 @@ import {
   Sparkles, Coffee, Award, HelpCircle, Image as ImageIcon,
   MessageSquare
 } from 'lucide-react';
+import tilapiaHeroImg from '../assets/images/tilapia_hero_1783025847365.jpg';
+import tilapiaHomeHeroImg from '../assets/images/tilapia_home_hero.png';
+import founderDavidImg from '../assets/images/portfolio_portrait_editorial.png';
+import faqLakePatternImg from '../assets/images/faq_lake_pattern.png';
 
-// Declare the generated high-quality images directly as static asset paths
-const tilapiaHeroImg = '/src/assets/images/tilapia_hero_1783025847365.jpg';
-const tilapiaHomeHeroImg = '/src/assets/images/tilapia_home_hero.png';
-const founderDavidImg = '/src/assets/images/portfolio_portrait_editorial.png';
 
 interface FishWebsiteProps {
   onAddToCart: (product: Product) => void;
@@ -656,7 +656,7 @@ export const FishWebsite: React.FC<FishWebsiteProps> = ({
         data-route="faq"
         className="py-12 sm:py-20"
         style={{
-          backgroundImage: "linear-gradient(rgba(250,249,246,0.72), rgba(250,249,246,0.78)), url('/src/assets/images/faq_lake_pattern.png')",
+          backgroundImage: `linear-gradient(rgba(250,249,246,0.72), rgba(250,249,246,0.78)), url(${faqLakePatternImg})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundAttachment: 'fixed',
