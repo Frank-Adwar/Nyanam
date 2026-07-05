@@ -73,9 +73,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         </div>
 
         {/* Pricing and CTAs */}
-        <div className="mt-4 flex items-center justify-between gap-2">
-          <div>
-            <div className="flex items-baseline gap-1.5">
+        <div className="mt-4 flex flex-col items-stretch gap-3 min-[380px]:flex-row min-[380px]:items-center min-[380px]:justify-between min-[380px]:gap-2">
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-baseline gap-1.5">
               <span className="font-display text-lg font-bold text-gray-950">
                 KSH {product.price.toLocaleString()}
               </span>
@@ -91,7 +91,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           {/* Add / Quantity indicator */}
           <button
             onClick={() => onAddToCart(product)}
-            className={`inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2.5 font-display text-xs font-semibold shadow-sm transition-all cursor-pointer ${
+            className={`inline-flex shrink-0 items-center justify-center gap-1.5 rounded-xl px-3.5 py-2.5 font-display text-xs font-semibold shadow-sm transition-all cursor-pointer ${
               cartQuantity > 0
                 ? 'bg-cyan-50 text-cyan-700 hover:bg-cyan-100'
                 : 'bg-cyan-600 text-white hover:bg-cyan-700'

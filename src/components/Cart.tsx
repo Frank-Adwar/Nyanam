@@ -86,7 +86,7 @@ export const Cart: React.FC<CartProps> = ({
       )
       .join('\n');
 
-    const message = `*NEW ORDER FROM VICTORIA FRESH* 🐠\n--------------------------------------\n*Order ID:* ${orderId}\n*Customer Name:* ${formData.customerName}\n*Phone Number:* ${formData.customerPhone}\n*Delivery Address:* ${formData.deliveryAddress}\n*Delivery Mode:* ${
+    const message = `*NEW ORDER FROM NYANAM FISHERIES* 🐠\n--------------------------------------\n*Order ID:* ${orderId}\n*Customer Name:* ${formData.customerName}\n*Phone Number:* ${formData.customerPhone}\n*Delivery Address:* ${formData.deliveryAddress}\n*Delivery Mode:* ${
       formData.deliveryMethod === 'home' ? 'Home Delivery (KSH 250)' : 'Self Pickup at Hub (Free)'
     }\n*Payment Mode:* ${formData.paymentMethod === 'mpesa' ? 'M-Pesa Prompt' : 'Cash on Delivery'}\n\n*ITEMS ORDERED:*\n${itemsText}\n\n*Subtotal:* KSH ${subtotal.toLocaleString()}\n*Delivery Fee:* KSH ${deliveryFee.toLocaleString()}\n*GRAND TOTAL:* KSH ${grandTotal.toLocaleString()}\n\n${
       formData.notes ? `*Prep Instructions:* ${formData.notes}\n` : ''
@@ -118,7 +118,7 @@ export const Cart: React.FC<CartProps> = ({
         onClick={onClose}
       />
 
-      <div className="absolute inset-y-0 right-0 flex max-w-full pl-10">
+      <div className="absolute inset-y-0 right-0 flex w-full max-w-full sm:w-auto sm:pl-10">
         <div className="w-screen max-w-md transform bg-white shadow-2xl transition-all duration-300 flex flex-col h-full">
           
           {/* Cart Header */}
@@ -164,14 +164,14 @@ export const Cart: React.FC<CartProps> = ({
                     <p className="text-xs text-gray-500">Review your products before entering delivery coordinates:</p>
                     <div className="divide-y divide-gray-100">
                       {cartItems.map((item) => (
-                        <div key={item.product.id} className="flex py-4 gap-4">
+                        <div key={item.product.id} className="flex min-w-0 py-4 gap-3 sm:gap-4">
                           <img
                             src={item.product.image}
                             alt={item.product.name}
                             className="h-16 w-16 rounded-xl object-cover border border-gray-100 shrink-0"
                             referrerPolicy="no-referrer"
                           />
-                          <div className="flex-1">
+                          <div className="min-w-0 flex-1">
                             <h4 className="font-display text-sm font-semibold text-gray-950 leading-tight">
                               {item.product.name}
                             </h4>

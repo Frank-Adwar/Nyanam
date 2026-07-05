@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -10,13 +10,51 @@
 /* Custom scrollbar and smooth scroll */
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
 }
 
 body {
   font-family: var(--font-sans);
   background-color: #fcfcfd;
   color: #1f2937;
-  overflow-x: hidden;
+  overflow-x: clip;
+  width: 100%;
+}
+
+#root {
+  min-width: 0;
+  width: 100%;
+  overflow-x: clip;
+}
+
+img,
+video,
+svg {
+  max-width: 100%;
+}
+
+button,
+a,
+p,
+h1,
+h2,
+h3,
+h4 {
+  overflow-wrap: anywhere;
+}
+
+/* Each main-navigation destination is a distinct page view. */
+.page-sections > section {
+  display: none;
+}
+
+.page-sections[data-page="home"] > [data-route="home"],
+.page-sections[data-page="products"] > [data-route="products"],
+.page-sections[data-page="about"] > [data-route="about"],
+.page-sections[data-page="gallery"] > [data-route="gallery"],
+.page-sections[data-page="faq"] > [data-route="faq"],
+.page-sections[data-page="contact"] > [data-route="contact"] {
+  display: block;
 }
 
 /* Custom animations and styling utilities */
@@ -27,5 +65,16 @@ body {
 
 .animate-pulse-subtle {
   animation: pulse-subtle 3s infinite ease-in-out;
+}
+
+.portfolio-page {
+  font-family: "Inter", Arial, sans-serif;
+}
+
+.portfolio-display,
+.portfolio-wordmark {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-weight: 500;
+  letter-spacing: -0.035em;
 }
 

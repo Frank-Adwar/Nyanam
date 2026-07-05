@@ -5,7 +5,7 @@
 
 import React, { useState } from 'react';
 import { Product, CartItem } from '../types';
-import { PRODUCTS, FAQS, GALLERY, TESTIMONIALS, BRAND_NAME, CONTACT_EMAIL, CONTACT_PHONE, PHYSICAL_ADDRESS, WHATSAPP_NUMBER } from '../data';
+import { PRODUCTS, FAQS, GALLERY, TESTIMONIALS, BRAND_NAME, CONTACT_EMAIL, CONTACT_PHONE, CONTACT_PHONE_SECONDARY, PHYSICAL_ADDRESS, WHATSAPP_NUMBER } from '../data';
 import { ProductCard } from '../components/ProductCard';
 import { useRouter } from '../components/Router';
 import { 
@@ -17,7 +17,8 @@ import {
 
 // Declare the generated high-quality images directly as static asset paths
 const tilapiaHeroImg = '/src/assets/images/tilapia_hero_1783025847365.jpg';
-const founderDavidImg = '/src/assets/images/founder_david_1783025860180.jpg';
+const tilapiaHomeHeroImg = '/src/assets/images/tilapia_home_hero.png';
+const founderDavidImg = '/src/assets/images/portfolio_portrait_editorial.png';
 
 interface FishWebsiteProps {
   onAddToCart: (product: Product) => void;
@@ -30,13 +31,21 @@ export const FishWebsite: React.FC<FishWebsiteProps> = ({
   cartItems,
   setActiveSection,
 }) => {
-  const { navigate } = useRouter();
+  const { navigate, path } = useRouter();
+  const currentPage = ({
+    '/fish': 'home',
+    '/products': 'products',
+    '/about': 'about',
+    '/faq': 'faq',
+    '/contact': 'contact',
+  } as Record<string, string>)[path] ?? 'home';
   
   // Gallery states
   const [selectedGalleryTab, setSelectedGalleryTab] = useState<'all' | 'lake' | 'kitchen' | 'delivery' | 'community'>('all');
   
   // FAQ states
   const [openFaqId, setOpenFaqId] = useState<string | null>('faq-1');
+  const [productView, setProductView] = useState<'raw' | 'ready'>('raw');
 
   // Contact form submission state
   const [contactForm, setContactForm] = useState({ name: '', email: '', message: '' });
@@ -62,19 +71,99 @@ export const FishWebsite: React.FC<FishWebsiteProps> = ({
     ? GALLERY
     : GALLERY.filter(item => item.category === selectedGalleryTab);
 
+  const readyMadeProductIds = new Set([
+    'fried-tilapia-pack',
+    'smoked-tilapia',
+    'tilapia-nuggets',
+    'tilapia-burgers',
+    'tilapia-soup-base',
+  ]);
+  const rawProducts = PRODUCTS.filter((product) => !readyMadeProductIds.has(product.id));
+  const readyMadeProducts = PRODUCTS.filter((product) => readyMadeProductIds.has(product.id));
+
   const scrollToSection = (id: string) => {
     setActiveSection(id);
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    const routes: Record<string, string> = { shop: '/products', contact: '/contact' };
+    navigate(routes[id] ?? '/fish');
   };
 
   return (
-    <div className="bg-white">
+    <div className="page-sections bg-white" data-page={currentPage}>
+
+      {/* SINGLE-VIEWPORT HOME: trust first, then a clear buying choice */}
+      <section data-route="home" className="relative h-[100svh] min-h-[600px] max-h-[760px] overflow-hidden bg-[#0d1512] text-white sm:h-[100dvh] sm:min-h-[520px] sm:max-h-[680px]">
+        <img
+          src={tilapiaHomeHeroImg}
+          alt="Premium whole Lake Victoria tilapia on clean ice"
+          className="absolute inset-0 h-full w-full object-cover object-[61%_center] sm:object-[68%_center]"
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(10,12,11,0.96)_0%,rgba(12,13,12,0.86)_58%,rgba(8,8,8,0.28)_100%)] sm:bg-[linear-gradient(90deg,rgba(10,12,11,0.97)_0%,rgba(12,13,12,0.88)_38%,rgba(10,10,10,0.34)_64%,rgba(8,8,8,0.08)_100%)]" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-32 bg-[linear-gradient(to_bottom,transparent_0%,rgba(13,21,18,0.08)_28%,rgba(45,51,43,0.2)_58%,rgba(244,239,228,0.72)_86%,#f4efe4_100%)] sm:h-40" />
+
+        <div className="relative mx-auto flex h-full max-w-[1400px] items-center px-4 pb-5 pt-20 min-[360px]:px-5 sm:px-8 sm:pb-5 sm:pt-28 lg:px-12">
+          <div className="max-w-lg xl:max-w-[590px]">
+            <div className="mb-3 inline-flex items-center gap-2 border-l-2 border-[#bd9462] pl-3 text-[8px] font-bold uppercase tracking-[0.18em] text-[#d9c4a9] sm:text-[9px]">
+              17 years of fisheries experience
+            </div>
+
+            <h1 className="font-display text-[2.05rem] font-black leading-[0.94] tracking-[-0.045em] min-[360px]:text-[2.35rem] sm:text-5xl lg:text-[3.65rem] xl:text-[4rem]">
+              Lake Victoria tilapia.<br /><span className="font-serif font-medium italic text-[#f0b45c]">Freshness you can trust.</span>
+            </h1>
+            <p className="mt-3 max-w-md text-xs leading-relaxed text-white/72 sm:mt-4 sm:text-sm">
+              Responsibly sourced, cleaned to order and kept cold from shore to door.
+            </p>
+
+            <div className="mt-4 flex flex-col gap-2.5 sm:mt-5 sm:flex-row">
+              <button
+                onClick={() => navigate('/products')}
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#b44932] px-5 py-3 text-xs font-bold text-white shadow-xl shadow-black/20 transition-colors hover:bg-[#963722] sm:px-5 sm:py-3"
+              >
+                Shop fresh tilapia <ArrowRight className="h-4 w-4" />
+              </button>
+              <button
+                onClick={() => navigate('/contact')}
+                className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/45 bg-black/20 px-5 py-3 text-xs font-bold text-white backdrop-blur-md transition-colors hover:bg-white hover:text-[#231f20] sm:px-5 sm:py-3"
+              >
+                Request bulk pricing
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <section data-route="home" className="bg-[#f4efe4] text-[#1d2922]">
+        <div className="mx-auto grid max-w-[1400px] gap-10 px-5 py-14 sm:px-8 lg:grid-cols-[1.1fr_1fr] lg:px-12 lg:py-20">
+          <div className="max-w-xl">
+            <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[#a04430]">Trust is the first ingredient</p>
+            <h2 className="mt-4 font-serif text-4xl leading-[1.02] text-[#1d2922] sm:text-5xl">Good fish needs<br /><em className="text-[#a84430]">nothing to hide.</em></h2>
+            <p className="mt-5 text-sm leading-7 text-[#655d55]">
+              We buy directly from Lake Victoria fishing communities, clean each order hygienically, keep it cold, and confirm the exact weight before dispatch. Simple food. Clear provenance. Fair value.
+            </p>
+          </div>
+
+          <div className="grid gap-px overflow-hidden rounded-xl border border-[#d9cdbd] bg-[#d9cdbd] sm:grid-cols-2">
+            <button onClick={() => navigate('/products')} className="group bg-[#faf7f1] p-6 text-left transition-colors hover:bg-white sm:p-8">
+              <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#4f6b55]">For your table</span>
+              <h3 className="mt-5 font-serif text-3xl">Choose a bundle</h3>
+              <p className="mt-3 text-xs leading-5 text-[#766d64]">Select the preparation, size and quantity that suits your home.</p>
+              <span className="mt-8 inline-flex items-center gap-2 text-xs font-bold text-[#a84430]">View products <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></span>
+            </button>
+            <button onClick={() => navigate('/contact')} className="group bg-[#faf7f1] p-6 text-left transition-colors hover:bg-white sm:p-8">
+              <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#4f6b55]">For your business</span>
+              <h3 className="mt-5 font-serif text-3xl">Order in bulk</h3>
+              <p className="mt-3 text-xs leading-5 text-[#766d64]">Reliable supply and volume pricing for restaurants, hotels and retailers.</p>
+              <span className="mt-8 inline-flex items-center gap-2 text-xs font-bold text-[#a84430]">Discuss supply <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></span>
+            </button>
+          </div>
+        </div>
+        <div className="border-t border-[#d9cdbd] px-5 py-4 text-center text-[9px] font-bold uppercase tracking-[0.18em] text-[#777065]">
+          Dunga & Kendu Bay sourcing · Kisumu preparation · Nairobi delivery
+        </div>
+      </section>
       
       {/* 1. HERO SECTION */}
-      <section id="home" className="relative overflow-hidden bg-gradient-to-b from-cyan-50/70 via-white to-white py-16 sm:py-24">
+      <section id="home" data-route="legacy-home" className="relative overflow-hidden bg-gradient-to-b from-cyan-50/70 via-white to-white py-16 sm:py-24">
         {/* Subtle grid pattern background */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#e5e7eb_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-30" />
         
@@ -115,7 +204,7 @@ export const FishWebsite: React.FC<FishWebsiteProps> = ({
               </div>
 
               {/* Trust highlights */}
-              <div className="grid grid-cols-3 gap-4 border-t border-gray-100 pt-8 text-center sm:text-left">
+              <div className="grid grid-cols-1 gap-4 border-t border-gray-100 pt-8 text-left min-[420px]:grid-cols-3 min-[420px]:text-center sm:text-left">
                 <div>
                   <p className="font-display text-2xl font-black text-gray-950">24h</p>
                   <p className="text-[11px] font-medium text-gray-500 uppercase tracking-wider">Lake-to-Nairobi Transit</p>
@@ -173,11 +262,11 @@ export const FishWebsite: React.FC<FishWebsiteProps> = ({
       </section>
 
       {/* 2. WHY BUY FROM US (BENEFITS) */}
-      <section className="bg-gray-50 py-16 sm:py-24">
+      <section data-route="legacy-home" className="bg-gray-50 py-16 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-3 mb-12 sm:mb-16">
             <span className="font-mono text-xs font-bold uppercase tracking-widest text-cyan-600">Victoria Standards</span>
-            <h2 className="font-display text-3xl font-extrabold text-gray-950 sm:text-4xl">
+            <h2 className="font-display text-2xl font-extrabold text-gray-950 min-[380px]:text-3xl sm:text-4xl">
               Why Discerning Kenyan Homes Choose Us
             </h2>
             <p className="mx-auto max-w-2xl text-sm sm:text-base text-gray-600">
@@ -223,45 +312,156 @@ export const FishWebsite: React.FC<FishWebsiteProps> = ({
       </section>
 
       {/* 3. PRODUCT SHOP SECTION */}
-      <section id="shop" className="py-16 sm:py-24">
+      <section id="shop" data-route="products" className="py-8 sm:py-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <div className="space-y-2">
-              <span className="font-mono text-xs font-bold uppercase tracking-widest text-cyan-600">Premium Seafood Shop</span>
-              <h2 className="font-display text-3xl font-extrabold text-gray-950 sm:text-4xl">
-                Browse Our Fresh Tilapia Products
+              <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#a84430]">From Lake Victoria to your table</span>
+              <h2 className="font-display text-2xl font-extrabold text-gray-950 min-[380px]:text-3xl sm:text-4xl">
+                Choose how you want your fish
               </h2>
               <p className="max-w-2xl text-xs sm:text-sm text-gray-500">
-                From raw clean fillets to woodfire-smoked traditional catches. Add to cart to prepare a dynamic WhatsApp custom delivery request.
+                Fresh and cleaned for your own recipe, or prepared by us and ready for the table. Every order is confirmed by weight before dispatch.
               </p>
             </div>
             
             {/* Support guarantee badge */}
-            <div className="rounded-xl border border-cyan-100 bg-cyan-50/50 p-3 flex items-center gap-2 shrink-0">
-              <Heart className="h-5 w-5 text-cyan-600" />
+            <div className="rounded-xl border border-[#d7dfd5] bg-[#f2f6f1] p-3 flex items-center gap-2 shrink-0">
+              <Heart className="h-5 w-5 text-[#4f6b55]" />
               <div className="text-[10px] leading-tight">
-                <p className="font-bold text-cyan-900">Direct-to-Fisher Profit</p>
-                <p className="text-cyan-700">30% higher wages returned to fishers</p>
+                <p className="font-bold text-[#263c2d]">Bought closer to the source</p>
+                <p className="text-[#58705e]">More value returned to fishing families</p>
               </div>
             </div>
           </div>
 
-          {/* Grid list of all products */}
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {PRODUCTS.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                onAddToCart={onAddToCart}
-                cartQuantity={getCartQuantity(product.id)}
-              />
-            ))}
+          <div className="mb-12 grid overflow-hidden rounded-2xl border border-[#ded4c5] bg-[#f4efe4] md:grid-cols-2">
+            <button
+              onClick={() => setProductView('raw')}
+              className={`border-b border-[#ded4c5] p-5 text-left transition-colors md:border-b-0 md:border-r sm:p-6 ${productView === 'raw' ? 'bg-[#183329] text-white' : 'bg-[#f4efe4] hover:bg-white'}`}
+            >
+              <span className={`font-mono text-[9px] font-bold uppercase tracking-[0.2em] ${productView === 'raw' ? 'text-[#dfb778]' : 'text-[#4f6b55]'}`}>Cook it your way</span>
+              <h3 className={`mt-2 font-serif text-2xl min-[380px]:text-3xl ${productView === 'raw' ? 'text-white' : 'text-[#1d2922]'}`}>Raw & ready to cook</h3>
+              <p className={`mt-2 max-w-md text-xs leading-5 ${productView === 'raw' ? 'text-white/65' : 'text-[#716960]'}`}>Whole cleaned fish, steaks, fillets and marinated choices—cold-packed for your kitchen.</p>
+              <span className={`mt-4 inline-block text-[9px] font-bold uppercase tracking-[0.18em] ${productView === 'raw' ? 'text-[#dfb778]' : 'text-[#4f6b55]'}`}>{productView === 'raw' ? 'Showing now' : 'View collection'} →</span>
+            </button>
+            <button
+              onClick={() => setProductView('ready')}
+              className={`p-5 text-left transition-colors sm:p-6 ${productView === 'ready' ? 'bg-[#8f3c2d] text-white' : 'bg-[#f4efe4] hover:bg-white'}`}
+            >
+              <span className={`font-mono text-[9px] font-bold uppercase tracking-[0.2em] ${productView === 'ready' ? 'text-[#f1c58b]' : 'text-[#a84430]'}`}>We cook, you serve</span>
+              <h3 className={`mt-2 font-serif text-2xl min-[380px]:text-3xl ${productView === 'ready' ? 'text-white' : 'text-[#1d2922]'}`}>Cooked & ready to eat</h3>
+              <p className={`mt-2 max-w-md text-xs leading-5 ${productView === 'ready' ? 'text-white/70' : 'text-[#716960]'}`}>Fried, smoked and convenient prepared options for quick meals, families and gatherings.</p>
+              <span className={`mt-4 inline-block text-[9px] font-bold uppercase tracking-[0.18em] ${productView === 'ready' ? 'text-[#f1c58b]' : 'text-[#a84430]'}`}>{productView === 'ready' ? 'Showing now' : 'View collection'} →</span>
+            </button>
           </div>
+
+          {productView === 'raw' && <div className="mb-14">
+            <div className="mb-5 flex items-end justify-between border-b border-[#d9d5cf] pb-3">
+              <div>
+                <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#4f6b55]">Raw collection</p>
+                <h3 className="mt-1 font-serif text-3xl text-gray-950">For the pan, grill or stew</h3>
+              </div>
+              <span className="hidden text-xs text-gray-400 sm:block">{rawProducts.length} choices</span>
+            </div>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {rawProducts.map((product) => (
+                <ProductCard key={product.id} product={product} onAddToCart={onAddToCart} cartQuantity={getCartQuantity(product.id)} />
+              ))}
+            </div>
+          </div>}
+
+          {productView === 'ready' && <div>
+            <div className="mb-5 flex items-end justify-between border-b border-[#d9d5cf] pb-3">
+              <div>
+                <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#a84430]">Prepared collection</p>
+                <h3 className="mt-1 font-serif text-3xl text-gray-950">Ready when hunger arrives</h3>
+              </div>
+              <span className="hidden text-xs text-gray-400 sm:block">{readyMadeProducts.length} choices</span>
+            </div>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {readyMadeProducts.map((product) => (
+                <ProductCard key={product.id} product={product} onAddToCart={onAddToCart} cartQuantity={getCartQuantity(product.id)} />
+              ))}
+            </div>
+          </div>}
+
+          <div className="mt-14 flex flex-col justify-between gap-6 rounded-2xl bg-[#183329] px-6 py-7 text-white sm:flex-row sm:items-center sm:px-8">
+            <div>
+              <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#dfb778]">Restaurants · Hotels · Retailers · Events</p>
+              <h3 className="mt-2 font-serif text-3xl">Need fish in serious volume?</h3>
+              <p className="mt-2 text-xs text-white/65">Ask for weekly supply, custom preparation and volume pricing from 20kg.</p>
+            </div>
+            <button onClick={() => navigate('/contact')} className="shrink-0 rounded-lg bg-[#b44932] px-5 py-3 text-xs font-bold transition-colors hover:bg-[#963722]">
+              Request a bulk quote
+            </button>
+          </div>
+          <p className="mt-5 text-center text-[9px] leading-4 text-gray-400">
+            Documentary Kenyan and Lake Victoria photography sourced from Wikimedia Commons under Creative Commons licences; individual creator details remain available on each source file page.
+          </p>
         </div>
       </section>
 
       {/* 4. ABOUT SECTION (SOURCING STORY) */}
-      <section id="about" className="bg-gray-950 text-white py-16 sm:py-24 overflow-hidden relative">
+      <section id="about" data-route="about" className="bg-[#f4efe4] text-[#1d2922]">
+        <div className="mx-auto max-w-[1400px] px-5 py-16 sm:px-8 lg:px-12 lg:py-24">
+          <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[#a04430]">How we source</p>
+              <h1 className="mt-5 font-serif text-4xl leading-[0.95] tracking-[-0.035em] sm:text-6xl">
+                From the lake,<br /><em>without the long story.</em>
+              </h1>
+              <p className="mt-7 max-w-lg text-sm leading-7 text-[#665f57]">
+                Good tilapia does not need clever language. It needs clean water, careful hands, cold storage and an honest route to market. We work directly with fishing communities around Lake Victoria and keep that route short.
+              </p>
+              <p className="mt-5 max-w-lg text-sm leading-7 text-[#665f57]">
+                Fish is collected in the morning, weighed openly, iced immediately, cleaned in Kisumu and dispatched in temperature-controlled packaging. You know what you are buying and where it came from.
+              </p>
+            </div>
+
+            <div className="border-t border-[#cfc2af]">
+              {[
+                ['01', 'Sourced from Lake Victoria', 'Our fresh tilapia comes directly from the world’s second-largest freshwater lake, ensuring top quality and unmatched freshness in every order.'],
+                ['02', 'Fresh and Natural', 'We pride ourselves on offering sustainably sourced fish with no additives—just pure, organic goodness straight to your table.'],
+                ['03', 'Reliable and Fast Delivery', 'Enjoy weekly or fortnightly deliveries, tailored to your schedule. We ensure your tilapia arrives fresh, every time.'],
+              ].map(([number, title, copy]) => (
+                <div key={number} className="grid grid-cols-[42px_1fr] gap-x-3 gap-y-2 border-b border-[#cfc2af] py-6 sm:grid-cols-[55px_210px_1fr] sm:py-8">
+                  <span className="font-mono text-[10px] text-[#a04430]">{number}</span>
+                  <h2 className="font-serif text-2xl leading-tight">{title}</h2>
+                  <p className="col-start-2 text-xs leading-6 text-[#716960] sm:col-start-3">{copy}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-16 grid border-y border-[#cfc2af] sm:grid-cols-3">
+            <div className="py-5 sm:pr-6"><strong className="block font-serif text-2xl">17 years</strong><span className="text-[10px] uppercase tracking-[0.16em] text-[#746c62]">Experience in fisheries and supply</span></div>
+            <div className="border-y border-[#cfc2af] py-5 sm:border-x sm:border-y-0 sm:px-6"><strong className="block font-serif text-2xl">Confirmed weight</strong><span className="text-[10px] uppercase tracking-[0.16em] text-[#746c62]">Clear quantity before dispatch</span></div>
+            <div className="py-5 sm:pl-6"><strong className="block font-serif text-2xl">Fair buying</strong><span className="text-[10px] uppercase tracking-[0.16em] text-[#746c62]">Direct value for fishing families</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section data-route="about" className="bg-white text-[#1d2922]">
+        <div className="mx-auto grid max-w-[1400px] items-stretch lg:grid-cols-2">
+          <img src={founderDavidImg} alt="David Ndolo" className="aspect-[4/5] h-full max-h-[620px] w-full object-cover object-top sm:aspect-auto sm:min-h-[460px] lg:max-h-none" />
+          <div className="flex flex-col justify-center px-6 py-14 sm:px-12 lg:px-16 lg:py-20">
+            <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-[#4f6b55]">The person behind the work</p>
+            <h2 className="mt-4 font-serif text-4xl sm:text-5xl">David Ndolo</h2>
+            <p className="mt-6 text-sm leading-7 text-[#665f57]">
+              David’s work in fish farming and entrepreneurship is grounded in practical experience: understanding production, market demand and the discipline required to build a dependable food business.
+            </p>
+            <p className="mt-4 text-sm leading-7 text-[#665f57]">
+              His approach is simple—share useful knowledge, build sustainable supply relationships and help more people see aquaculture as a serious enterprise.
+            </p>
+            <button onClick={() => navigate('/portfolio')} className="mt-9 inline-flex w-fit items-center gap-2 border-b border-[#1d2922] pb-2 text-xs font-bold uppercase tracking-[0.12em]">
+              Read David’s profile <ArrowRight className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section id="legacy-about" data-route="removed-about" className="hidden">
         <div className="absolute inset-0 bg-radial-gradient from-cyan-950/40 via-transparent to-transparent opacity-50" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 items-center">
@@ -309,7 +509,7 @@ export const FishWebsite: React.FC<FishWebsiteProps> = ({
               </p>
 
               <p className="text-xs sm:text-sm text-gray-400 leading-relaxed">
-                Victoria Fresh was founded to break this cycle. We partner directly with fishers on Lake Victoria, supply them with insulated ice-chests, run a state-of-the-art clean descaling warehouse in Kisumu, and transport the catch overnight. The result? Unmatched flavor, flawless sanitation, and a direct social impact.
+                Nyanam Fisheries was founded to break this cycle. We partner directly with fishers on Lake Victoria, supply them with insulated ice-chests, run a state-of-the-art clean descaling warehouse in Kisumu, and transport the catch overnight. The result? Unmatched flavor, flawless sanitation, and a direct social impact.
               </p>
 
               {/* Core Values list */}
@@ -334,7 +534,7 @@ export const FishWebsite: React.FC<FishWebsiteProps> = ({
       </section>
 
       {/* 5. FOUNDER PREVIEW (MEET DAVID) */}
-      <section className="py-16 sm:py-24">
+      <section data-route="removed-about" className="hidden">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="rounded-3xl border border-gray-100 bg-white p-8 sm:p-12 shadow-xl shadow-gray-200/40 relative overflow-hidden">
             
@@ -366,7 +566,7 @@ export const FishWebsite: React.FC<FishWebsiteProps> = ({
                 <h3 className="font-display text-2xl font-black text-gray-950 sm:text-3xl">Meet David Omondi</h3>
                 
                 <p className="font-sans text-xs sm:text-sm text-gray-600 leading-relaxed">
-                  "Growing up on the shores of Lake Victoria in Kisumu, I watched local fishers harvest some of the world’s best tilapia, only to sell it for pennies because they lacked cold storage or market connections. At Victoria Fresh, we are changing the story. We utilize modern cold chain routing to link Kisumu nets directly to your plate, raising incomes for fishing families while giving you healthy, certified seafood."
+                  "Growing up on the shores of Lake Victoria in Kisumu, I watched local fishers harvest some of the world’s best tilapia, only to sell it for pennies because they lacked cold storage or market connections. At Nyanam Fisheries, we are changing the story. We utilize modern cold chain routing to link Kisumu nets directly to your plate, raising incomes for fishing families while giving you healthy, certified seafood."
                 </p>
 
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-3">
@@ -389,7 +589,7 @@ export const FishWebsite: React.FC<FishWebsiteProps> = ({
       </section>
 
       {/* 6. MEDIA GALLERY SECTION */}
-      <section id="gallery" className="bg-gray-50 py-16 sm:py-24">
+      <section id="gallery" data-route="removed-gallery" className="hidden">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           
           <div className="text-center space-y-3 mb-10">
@@ -451,10 +651,20 @@ export const FishWebsite: React.FC<FishWebsiteProps> = ({
       </section>
 
       {/* 7. FAQ SECTION */}
-      <section id="faq" className="py-16 sm:py-24">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+      <section
+        id="faq"
+        data-route="faq"
+        className="py-12 sm:py-20"
+        style={{
+          backgroundImage: "linear-gradient(rgba(250,249,246,0.72), rgba(250,249,246,0.78)), url('/src/assets/images/faq_lake_pattern.png')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed',
+        }}
+      >
+        <div className="mx-auto max-w-3xl rounded-3xl border border-white/80 bg-[#faf9f6]/95 px-5 py-8 shadow-[0_24px_70px_rgba(20,18,15,0.14)] backdrop-blur-[2px] sm:px-10 sm:py-12">
           
-          <div className="text-center space-y-3 mb-12">
+          <div className="text-center space-y-3 mb-10">
             <span className="font-mono text-xs font-bold uppercase tracking-widest text-cyan-600 flex items-center justify-center gap-1">
               <HelpCircle className="h-4 w-4" /> Got Questions?
             </span>
@@ -467,7 +677,7 @@ export const FishWebsite: React.FC<FishWebsiteProps> = ({
           </div>
 
           {/* Accordion List */}
-          <div className="divide-y divide-gray-100 border-t border-b border-gray-100">
+          <div className="divide-y divide-[#d9d0c4] border-y border-[#d9d0c4]">
             {FAQS.map((faq) => {
               const isOpen = openFaqId === faq.id;
               return (
@@ -501,7 +711,7 @@ export const FishWebsite: React.FC<FishWebsiteProps> = ({
       </section>
 
       {/* 8. TESTIMONIALS */}
-      <section className="bg-gray-50 py-16 sm:py-24">
+      <section data-route="faq" className="bg-gray-50 py-16 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-3 mb-12">
             <span className="font-mono text-xs font-bold uppercase tracking-widest text-cyan-600">Verified Reviews</span>
@@ -548,7 +758,7 @@ export const FishWebsite: React.FC<FishWebsiteProps> = ({
       </section>
 
       {/* 9. CONTACT SECTION */}
-      <section id="contact" className="py-16 sm:py-24">
+      <section id="contact" data-route="contact" className="py-16 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 items-start">
             
@@ -577,7 +787,7 @@ export const FishWebsite: React.FC<FishWebsiteProps> = ({
                   <div className="rounded-xl bg-cyan-50 p-2.5 text-cyan-600 shrink-0"><Phone className="h-5 w-5" /></div>
                   <div>
                     <p className="font-display text-xs font-bold text-gray-950">Call or SMS Sales</p>
-                    <p className="text-xs text-gray-500 leading-normal mt-0.5">{CONTACT_PHONE}</p>
+                    <p className="text-xs text-gray-500 leading-normal mt-0.5">{CONTACT_PHONE}<br />{CONTACT_PHONE_SECONDARY}</p>
                   </div>
                 </div>
 
@@ -614,7 +824,7 @@ export const FishWebsite: React.FC<FishWebsiteProps> = ({
                   </div>
                   <h4 className="font-display text-sm font-bold text-emerald-900">Message Received!</h4>
                   <p className="text-xs text-emerald-700 leading-relaxed">
-                    Thank you for contacting Victoria Fresh. David's customer logistics associate will get back to you shortly at the provided email.
+                    Thank you for contacting Nyanam Fisheries. David's customer logistics associate will get back to you shortly at the provided email.
                   </p>
                 </div>
               ) : (
@@ -670,7 +880,7 @@ export const FishWebsite: React.FC<FishWebsiteProps> = ({
       </section>
 
       {/* 10. WHATSAPP ORDER CTA CARD */}
-      <section className="bg-gradient-to-r from-cyan-600 to-cyan-800 text-white py-12">
+      <section data-route="contact" className="bg-gradient-to-r from-cyan-600 to-cyan-800 text-white py-12">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center space-y-6">
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-white/10 backdrop-blur-xs">
             <Anchor className="h-6 w-6 text-white animate-pulse-subtle" />
@@ -689,7 +899,7 @@ export const FishWebsite: React.FC<FishWebsiteProps> = ({
               Order Online From Shop Catalog
             </button>
             <a
-              href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hello%20Victoria%20Fresh!%20I%20want%20to%20order%20some%20fresh%20Tilapia%20delivered.`}
+              href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hello%20Nyanam%20Fisheries!%20I%20want%20to%20order%20some%20fresh%20Tilapia%20delivered.`}
               target="_blank"
               rel="noopener noreferrer"
               className="rounded-xl bg-emerald-500 px-6 py-3 font-display text-xs font-bold text-white hover:bg-emerald-600 transition-colors shadow-lg flex items-center gap-1.5"

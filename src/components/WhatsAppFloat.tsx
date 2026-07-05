@@ -9,12 +9,12 @@ import { WHATSAPP_NUMBER } from '../data';
 
 export const WhatsAppFloat: React.FC = () => {
   const message = encodeURIComponent(
-    "Hello Victoria Fresh! I am visiting your website and would like to make an inquiry about your fresh Lake Victoria Tilapia."
+    "Hello Nyanam Fisheries! I am visiting your website and would like to make an inquiry about your fresh Lake Victoria Tilapia."
   );
   const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`;
 
   return (
-    <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end">
+    <div className="fixed bottom-4 right-4 z-40 flex flex-col items-end sm:bottom-6 sm:right-6">
       
       {/* Tooltip bubble */}
       <div className="mb-2 hidden sm:block max-w-xs rounded-xl bg-gray-900 px-3.5 py-2 text-xs font-medium text-white shadow-lg animate-pulse-subtle">
@@ -28,7 +28,7 @@ export const WhatsAppFloat: React.FC = () => {
         href={whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="relative flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500 text-white shadow-lg transition-transform hover:scale-110 hover:bg-emerald-600 active:scale-95 cursor-pointer"
+        className="relative flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500 text-white shadow-lg transition-transform hover:scale-110 hover:bg-emerald-600 active:scale-95 cursor-pointer sm:h-14 sm:w-14"
         aria-label="Order on WhatsApp"
       >
         {/* Pulse radar rings */}

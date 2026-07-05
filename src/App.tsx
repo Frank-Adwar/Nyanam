@@ -96,7 +96,7 @@ function MainAppContent() {
       />
 
       {/* Premium Footer with integrated SEO */}
-      <Footer />
+      {path !== '/fish' && <Footer />}
     </div>
   );
 }

@@ -5,11 +5,12 @@
 
 import { Product, Testimonial, FAQItem, GalleryItem } from './types';
 
-export const BRAND_NAME = 'Victoria Fresh Tilapia';
-export const WHATSAPP_NUMBER = '254712345678'; // Kenyan format without plus sign
-export const CONTACT_EMAIL = 'orders@victoriafresh.co.ke';
-export const CONTACT_PHONE = '+254 712 345 678';
-export const PHYSICAL_ADDRESS = 'Victoria Fresh Hub, Kisumu Road & Nairobi Junction, Nairobi, Kenya';
+export const BRAND_NAME = 'Nyanam Fisheries';
+export const WHATSAPP_NUMBER = '254733675460'; // Kenyan format without plus sign
+export const CONTACT_EMAIL = 'info@nyanam-fish.com';
+export const CONTACT_PHONE = '+254 733 675 460';
+export const CONTACT_PHONE_SECONDARY = '+254 777 997 173';
+export const PHYSICAL_ADDRESS = 'Musa Gitau Road, off Waiyaki Way, Nairobi, Kenya';
 
 export const PRODUCTS: Product[] = [
   {
@@ -19,7 +20,7 @@ export const PRODUCTS: Product[] = [
     price: 650,
     originalPrice: 720,
     category: 'Fresh Catch',
-    image: 'https://images.unsplash.com/photo-1534482421-64566f976cfa?auto=format&fit=crop&w=600&q=80',
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Fresh%20Fish%20from%20Lake%20Victoria.jpg',
     unit: 'per kg (approx. 2-3 pcs)',
     available: true,
     featured: true,
@@ -31,7 +32,7 @@ export const PRODUCTS: Product[] = [
     description: 'De-boned, skinless prime fillets. Highly versatile, ideal for pan-searing, fish tacos, or healthy steaming.',
     price: 700,
     category: 'Fillets & Steaks',
-    image: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=600&q=80',
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Tilapia%20Fish%20from%20Lake%20Victoria.jpg',
     unit: 'per 500g pack',
     available: true,
     featured: true,
@@ -44,7 +45,7 @@ export const PRODUCTS: Product[] = [
     price: 3250,
     originalPrice: 3500,
     category: 'Ready-to-Eat',
-    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80',
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Fried%20Tilapia%2C%20Ugali%2C%20Sukuma%20Wiki%20and%20Kachumbari%20%28From%20Kisumu%29.JPG',
     unit: 'Family Pack (5 Large Whole Fish)',
     available: true,
     featured: true,
@@ -56,7 +57,7 @@ export const PRODUCTS: Product[] = [
     description: 'Slow-smoked over organic hardwood using traditional Kisumu methods. Imparts a rich, deep woodfire aroma.',
     price: 350,
     category: 'Smoked & Marinated',
-    image: 'https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=600&q=80',
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Cooked%20Fish.jpg',
     unit: 'per piece',
     available: true,
     featured: false,
@@ -69,7 +70,7 @@ export const PRODUCTS: Product[] = [
     price: 350,
     originalPrice: 400,
     category: 'Smoked & Marinated',
-    image: 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=600&q=80',
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Fresh%20Fish%20from%20Lake%20Victoria.jpg',
     unit: 'per single fish (cleaned & marinated)',
     available: true,
     featured: false,
@@ -81,7 +82,7 @@ export const PRODUCTS: Product[] = [
     description: 'Thick, center-cut bone-in bone-out tilapia cross sections. Holds shape excellently in rich stews or wet fries.',
     price: 650,
     category: 'Fillets & Steaks',
-    image: 'https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=600&q=80',
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Victoria%20tilapia%202.jpg',
     unit: 'per 1kg pack',
     available: true,
     featured: false,
@@ -93,7 +94,7 @@ export const PRODUCTS: Product[] = [
     description: 'Crispy, panko-breaded tilapia breast nuggets. A nutritious, high-protein snack that kids and families love.',
     price: 350,
     category: 'Ready-to-Eat',
-    image: 'https://images.unsplash.com/photo-1560684352-8497838a2229?auto=format&fit=crop&w=600&q=80',
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Fried%20Tilapia%2C%20Ugali%2C%20Sukuma%20Wiki%20and%20Kachumbari%20%28From%20Kisumu%29.JPG',
     unit: 'per 400g pack (approx. 15 nuggets)',
     available: true,
     featured: false,
@@ -101,11 +102,11 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 'tilapia-burgers',
-    name: 'Victoria Fish Burger Patties',
+    name: 'Nyanam Fish Burger Patties',
     description: 'Succulent spiced tilapia mince patties, mixed with fresh herbs. High in protein, low in fat, ready to grill.',
     price: 700,
     category: 'Ready-to-Eat',
-    image: 'https://images.unsplash.com/photo-1525059696034-4967a8e1dca2?auto=format&fit=crop&w=600&q=80',
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Cooked%20Fish.jpg',
     unit: 'Pack of 4 patties',
     available: true,
     featured: false,
@@ -117,7 +118,7 @@ export const PRODUCTS: Product[] = [
     description: 'Slow-simmered Tilapia head and bone concentrate, seasoned with local herbs. Loaded with natural collagen and minerals.',
     price: 350,
     category: 'Ready-to-Eat',
-    image: 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=600&q=80',
+    image: 'https://commons.wikimedia.org/wiki/Special:FilePath/Cooked%20Fish.jpg',
     unit: '500ml tub (frozen)',
     available: true,
     featured: false,
@@ -138,7 +139,7 @@ export const TESTIMONIALS: Testimonial[] = [
     id: '2',
     name: 'Chef Richard Kamau',
     role: 'Executive Chef, Lake Breeze Eatery',
-    review: 'Our restaurant depends on high-quality fillets. Victoria Fresh provides consistent size and exceptional taste. David’s team has never let us down on timely morning deliveries.',
+    review: 'Our restaurant depends on high-quality fillets. Nyanam Fisheries provides consistent size and exceptional taste. David’s team has never let us down on timely morning deliveries.',
     rating: 5,
     avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=150&q=80'
   },

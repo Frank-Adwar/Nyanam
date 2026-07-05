@@ -4,9 +4,9 @@
  */
 
 import React from 'react';
-import { Link, useRouter } from './Router';
+import { useRouter } from './Router';
 import { Anchor, Phone, Mail, MapPin, Heart, ShieldCheck } from 'lucide-react';
-import { CONTACT_EMAIL, CONTACT_PHONE, PHYSICAL_ADDRESS } from '../data';
+import { CONTACT_EMAIL, CONTACT_PHONE, CONTACT_PHONE_SECONDARY, PHYSICAL_ADDRESS } from '../data';
 
 export const Footer: React.FC = () => {
   const { navigate } = useRouter();
@@ -58,7 +58,7 @@ export const Footer: React.FC = () => {
             <div className="flex items-center gap-2 text-white">
               <Anchor className="h-6 w-6 stroke-[2.5] text-cyan-400" />
               <span className="font-display text-xl font-bold tracking-tight">
-                Victoria<span className="text-cyan-400">Fresh</span>
+                Nyanam <span className="text-cyan-400">Fisheries</span>
               </span>
             </div>
             <p className="text-xs leading-relaxed text-gray-500">
@@ -75,19 +75,16 @@ export const Footer: React.FC = () => {
             <h3 className="font-display text-xs font-semibold uppercase tracking-wider text-white">Quick Links</h3>
             <ul className="mt-4 space-y-2 text-sm">
               <li>
-                <button onClick={() => document.getElementById('home')?.scrollIntoView({ behavior: 'smooth' })} className="hover:text-cyan-400 transition-colors text-left">Home Base</button>
+                <button onClick={() => navigate('/fish')} className="hover:text-cyan-400 transition-colors text-left">Home Base</button>
               </li>
               <li>
-                <button onClick={() => document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' })} className="hover:text-cyan-400 transition-colors text-left">Products Catalog</button>
+                <button onClick={() => navigate('/products')} className="hover:text-cyan-400 transition-colors text-left">Products Catalog</button>
               </li>
               <li>
-                <button onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })} className="hover:text-cyan-400 transition-colors text-left">About Our Sourcing</button>
+                <button onClick={() => navigate('/about')} className="hover:text-cyan-400 transition-colors text-left">About Our Sourcing</button>
               </li>
               <li>
-                <button onClick={() => document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' })} className="hover:text-cyan-400 transition-colors text-left">Media Gallery</button>
-              </li>
-              <li>
-                <button onClick={() => document.getElementById('faq')?.scrollIntoView({ behavior: 'smooth' })} className="hover:text-cyan-400 transition-colors text-left">Help & FAQs</button>
+                <button onClick={() => navigate('/faq')} className="hover:text-cyan-400 transition-colors text-left">Help & FAQs</button>
               </li>
             </ul>
           </div>
@@ -122,7 +119,7 @@ export const Footer: React.FC = () => {
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="h-4 w-4 shrink-0 text-cyan-400" />
-                <span className="text-xs">{CONTACT_PHONE}</span>
+                <span className="text-xs">{CONTACT_PHONE}<br />{CONTACT_PHONE_SECONDARY}</span>
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="h-4 w-4 shrink-0 text-cyan-400" />
@@ -135,7 +132,7 @@ export const Footer: React.FC = () => {
 
         {/* Bottom copyright */}
         <div className="mt-12 border-t border-gray-900 pt-6 text-center text-xs text-gray-600 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p>© {currentYear} Victoria Fresh Ltd. All Rights Reserved. Sourced sustainably from Lake Victoria.</p>
+          <p>© {currentYear} Nyanam Fisheries. All Rights Reserved. Sourced sustainably from Lake Victoria.</p>
           <p className="flex items-center justify-center gap-1">
             Empowering Kisumu communities with <Heart className="h-3 w-3 fill-red-500 text-red-500" /> and sustainable trade.
           </p>
